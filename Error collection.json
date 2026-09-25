@@ -1,0 +1,274 @@
+{
+  "info": {
+    "_postman_id": "51c5d715-e63c-41e2-a9b7-c4ceec75d62c",
+    "name": "! Error collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9589244"
+  },
+  "item": [
+    {
+      "name": "Sign Up",
+      "item": [
+        {
+          "name": "Name Required",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.clear()\r",
+                  "let myRandomEmail = pm.variables.replaceIn('{{$randomEmail}}');\r",
+                  "console.log(myRandomEmail)\r",
+                  "pm.collectionVariables.set('myRandomEmail', myRandomEmail);\r",
+                  "let randomPassword=pm.variables.replaceIn('{{$randomPassword}}')\r",
+                  "let myRandomPassword=randomPassword.slice(0,10)+'1fA'\r",
+                  "console.log(myRandomPassword)\r",
+                  "pm.collectionVariables.set('myRandomPassword', myRandomPassword);\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let jsonData=pm.response.json()\r",
+                  "pm.test(\"Test Name is required\", function () {\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Name is required\")\r",
+                  "})\r",
+                  "\r",
+                  "pm.test(\"Test Status is error\", function () {\r",
+                  "pm.response.to.have.status(400);\r",
+                  "})"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{myRandomEmail}}\",\r\n    \"password\": \"{{myRandomPassword}}\",\r\n    \"repeatPassword\": \"{{myRandomPassword}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{path}}/api/auth/signup",
+              "protocol": "https",
+              "host": [
+                "{{path}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Name length 1",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.clear()\r",
+                  "let myRandomName=pm.variables.replaceIn('{{$randomFirstName}}');\r",
+                  "let RandomName=myRandomName.slice(0,1);\r",
+                  "pm.collectionVariables.set('myRandomName', RandomName);\r",
+                  "console.log(\"Name: \"+RandomName)\r",
+                  "let myRandomEmail = pm.variables.replaceIn('{{$randomEmail}}');\r",
+                  "console.log(myRandomEmail)\r",
+                  "pm.collectionVariables.set('myRandomEmail', myRandomEmail);\r",
+                  "let randomPassword=pm.variables.replaceIn('{{$randomPassword}}')\r",
+                  "let myRandomPassword=randomPassword.slice(0,10)+'1fA'\r",
+                  "console.log(myRandomPassword)\r",
+                  "pm.collectionVariables.set('myRandomPassword', myRandomPassword);\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let jsonData=pm.response.json()\r",
+                  "pm.test(\"Length of name is less than 2\", function () {\r",
+                  "pm.expect(jsonData.message).to.eql(\"Name has to be from 2 to 20 characters long\")})\r",
+                  "pm.test(\"Error Status 400\", function(){\r",
+                  "pm.expect(pm.response.code).to.eql(400)})\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{myRandomName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{myRandomEmail}}\",\r\n    \"password\": \"{{myRandomPassword}}\",\r\n    \"repeatPassword\": \"{{myRandomPassword}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{path}}/api/auth/signup",
+              "protocol": "https",
+              "host": [
+                "{{path}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Name length 21",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "console.clear()\r",
+                  "let additionalName=pm.variables.replaceIn('{{$randomFirstName}}');\r",
+                  "let myRandomName=pm.variables.replaceIn('{{$randomFirstName}}').padEnd(21,\"-\"+additionalName);\r",
+                  "console.log(\"Name: \"+myRandomName) \r",
+                  "pm.collectionVariables.set('myRandomName', myRandomName);\r",
+                  "\r",
+                  "let myRandomEmail = pm.variables.replaceIn('{{$randomEmail}}');\r",
+                  "console.log(\"Email:\"+ myRandomEmail)\r",
+                  "pm.collectionVariables.set('myRandomEmail', myRandomEmail);\r",
+                  "\r",
+                  "let randomPassword=pm.variables.replaceIn('{{$randomPassword}}')\r",
+                  "let myRandomPassword=randomPassword.slice(0,10)+'1fA'\r",
+                  "console.log(\"password: \"+myRandomPassword)\r",
+                  "pm.collectionVariables.set('myRandomPassword', myRandomPassword);\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let jsonData=pm.response.json()\r",
+                  "pm.test(\"Length of name is more than 20\", function () {\r",
+                  "pm.expect(jsonData.message).to.eql(\"Name has to be from 2 to 20 characters long\")})\r",
+                  "pm.test(\"Status is error\", function () {\r",
+                  "    pm.expect(pm.response.code).to.eql(400)})  \r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{myRandomName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{myRandomEmail}}\",\r\n    \"password\": \"{{myRandomPassword}}\",\r\n    \"repeatPassword\": \"{{myRandomPassword}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://{{path}}/api/auth/signup",
+              "protocol": "https",
+              "host": [
+                "{{path}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "myRandomEmail",
+      "value": ""
+    },
+    {
+      "key": "myRandomPassword",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "myRandomName",
+      "value": ""
+    },
+    {
+      "key": "path",
+      "value": ""
+    }
+  ]
+}
