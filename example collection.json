@@ -1,0 +1,935 @@
+{
+  "info": {
+    "_postman_id": "1899e20e-a6ac-4280-9092-67b0cc698c4b",
+    "name": "! homework 34",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "9589244"
+  },
+  "item": [
+    {
+      "name": "SignUP",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "let myRandomEmail = pm.variables.replaceIn('{{$randomEmail}}');\r",
+              "console.log(myRandomEmail)\r",
+              "pm.collectionVariables.set('myRandomEmail', myRandomEmail);\r",
+              "let randomPassword=pm.variables.replaceIn('{{$randomPassword}}')\r",
+              "let myRandomPassword=randomPassword.slice(0,10)+'1fA'\r",
+              "console.log(myRandomPassword)\r",
+              "pm.collectionVariables.set('myRandomPassword', myRandomPassword);\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData=pm.response.json()\r",
+              "let userId=jsonData.data.userId\r",
+              "pm.collectionVariables.set(\"userId\", userId)\r",
+              "console.log(\"user ID: \"+userId)\r",
+              "\r",
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "})\r",
+              "\r",
+              "pm.test(\"UserId is Number\",function(){\r",
+              "    pm.expect(userId).to.be.a('number')\r",
+              "})\r",
+              " let schema={\r",
+              "  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r",
+              "  \"title\": \"Generated schema for Root\",\r",
+              "  \"type\": \"object\",\r",
+              "  \"properties\": {\r",
+              "    \"status\": {\r",
+              "      \"type\": \"string\",\r",
+              "      \"enum\": [\"ok\"]\r",
+              "    },\r",
+              "    \"data\": {\r",
+              "      \"type\": \"object\",\r",
+              "      \"properties\": {\r",
+              "        \"userId\": {\r",
+              "          \"type\": \"number\",\r",
+              "          \"minimum\": 1\r",
+              "        },\r",
+              "        \"photoFilename\": {\r",
+              "          \"type\": \"string\"\r",
+              "        },\r",
+              "        \"distanceUnits\": {\r",
+              "          \"type\": \"string\",\r",
+              "          \"enum\": [\"ml\", \"km\"]\r",
+              "        },\r",
+              "        \"currency\": {\r",
+              "          \"type\": \"string\",\r",
+              "          \"enum\": [\"usd\", \"gbp\",\"uah\",\"pln\",\"eur\"]\r",
+              "        }\r",
+              "      },\r",
+              "      \"required\": [\r",
+              "        \"userId\",\r",
+              "        \"photoFilename\",\r",
+              "        \"distanceUnits\",\r",
+              "        \"currency\"\r",
+              "      ]\r",
+              "    }\r",
+              "  },\r",
+              "  \"required\": [\r",
+              "    \"status\",\r",
+              "    \"data\"\r",
+              "  ]\r",
+              "}\r",
+              "\r",
+              "pm.test(\"Response body matches schema\", function () {\r",
+              "pm.response.to.have.jsonSchema(schema)})\r",
+              "pm.test(\"Status property is success\", function () {\r",
+              "    pm.expect(jsonData.status).to.be.a('string');\r",
+              "    pm.expect(jsonData.status).to.eql('ok'); \r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"email\": \"{{myRandomEmail}}\",\r\n    \"password\": \"{{myRandomPassword}}\",\r\n    \"repeatPassword\": \"{{myRandomPassword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/auth/signup",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "signup"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\":\"{{myRandomEmail}}\",\r\n  \"password\":\"{{myRandomPassword}}\",\r\n  \"remember\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/auth/signin",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "signin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create a new Car",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "let jsonData=pm.response.json()\r",
+              "let carId=jsonData.data.id\r",
+              "let carMileage=jsonData.data.mileage\r",
+              "let carReported=jsonData.data.carCreatedAt\r",
+              "pm.collectionVariables.set(\"carId\", carId)\r",
+              "console.log(\"car ID: \"+ carId)\r",
+              "pm.collectionVariables.set(\"carMileage\",carMileage)\r",
+              "console.log(\"carMileage: \"+ carMileage)\r",
+              "pm.collectionVariables.set(\"carReported\", carReported)\r",
+              "console.log(\"carReported: \"+ carReported)\r",
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "})\r",
+              "pm.test(\"Logo is string with png use reg ex\",function(){\r",
+              "    pm.expect(jsonData.data.logo).to.match(/^[a-zA-Z]+\\.png$/);\r",
+              "    pm.expect(jsonData.data.logo).to.be.a('string');\r",
+              "})\r",
+              "\r",
+              "\r",
+              "    "
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "function getRandomInt(min,max){\r",
+              "    return Math.floor(Math.random() * (max - min + 1)) + min;\r",
+              "}\r",
+              "let  myRandomBrand= getRandomInt(1, 5);\r",
+              "console.log(\"Brand: \"+myRandomBrand)\r",
+              "pm.collectionVariables.set(\"myRandomBrand\", myRandomBrand);\r",
+              "\r",
+              "switch(myRandomBrand){\r",
+              "   case 1: {myRandomModel = getRandomInt(1, 5);break;}\r",
+              "   case 2: {myRandomModel = getRandomInt(6,10);break;}     \r",
+              "   case 3: {myRandomModel = getRandomInt(11,15);break;}\r",
+              "   case 4: {myRandomModel = getRandomInt(16,18);break;}    \r",
+              "   case 5: {myRandomModel = getRandomInt(19,23);break;}\r",
+              "}\r",
+              "console.log(\"Model: \"+myRandomModel)\r",
+              "pm.collectionVariables.set(\"myRandomModel\", myRandomModel);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"carBrandId\": {{myRandomBrand}},\r\n  \"carModelId\": {{myRandomModel}},\r\n  \"mileage\": 0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/cars",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "cars"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create an Expence",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "let carUpdatedMileage=Number(pm.collectionVariables.get(\"carMileage\")+10)\r",
+              "pm.collectionVariables.set(\"carUpdatedMileage\", carUpdatedMileage)\r",
+              "console.log(\"carUpdatedMileage: \", carUpdatedMileage)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.collectionVariables.set( \"carMileage\",pm.collectionVariables.get(\"carUpdatedMileage\"));\r",
+              "console.log(pm.collectionVariables.get(\"carMileage\"));\r",
+              "let jsonData=pm.response.json();\r",
+              "let expenceId=jsonData.data.id;\r",
+              "pm.collectionVariables.set(\"expenceId\",expenceId)\r",
+              "console.log(\"expence Id:\"+expenceId)\r",
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"carId\": {{carId}},\r\n  \"reportedAt\": \"{{carReported}}\",\r\n  \"mileage\": {{carUpdatedMileage}},\r\n  \"liters\": 11,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/expenses",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "expenses"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete an Expence  by ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n \"carId\": 516490,\r\n  \"reportedAt\": \"2026-05-13\",\r\n  \"mileage\": 10555,\r\n  \"liters\": 16,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}"
+        },
+        "url": {
+          "raw": "https://{{path}}/api/expenses/{{expenceId}}",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "expenses",
+            "{{expenceId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Car by Id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "https://{{path}}/api/cars/{{carId}}",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "cars",
+            "{{carId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Cars for current User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://{{path}}/api/cars/",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "cars",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Logged User",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "let randomDate=pm.variables.replaceIn('{{$randomDatePast}}')\r",
+              "let randomYear=Math.floor(Math.random()*(2005-1960+1)+1960)\r",
+              "//Math.random()*(2005-1960+1) count  possible number of years = 46\r",
+              "//0....46+1960=1960 ....2005\r",
+              "console.log(randomYear) \r",
+              "let newDate= new Date(randomDate)\r",
+              "console.log (newDate)\r",
+              "newDate.setFullYear(randomYear) //set year to random year\r",
+              "let myRandomDate=newDate.toISOString()\r",
+              "// .toISOString() converts date to ISO string format\r",
+              "console.log (myRandomDate)\r",
+              "pm.collectionVariables.set('myRandomDate',myRandomDate)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"{{$randomFirstName}}\",\r\n    \"lastName\": \"{{$randomLastName}}\",\r\n    \"dateBirth\": \"{{myRandomDate}}\",\r\n    \"country\": \"{{$randomCountry}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/users/profile",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "profile"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit User Settings",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "function getRandomInt(min,max){\r",
+              "    return Math.floor(Math.random() * (max - min + 1)) + min;\r",
+              "}\r",
+              "let currency = getRandomInt(1,5);\r",
+              "let distanceUnits=getRandomInt(1,2)\r",
+              "switch (currency){\r",
+              "    case 1: currency = \"usd\"; break;\r",
+              "    case 2: currency = \"eur\"; break;\r",
+              "    case 3: currency = \"gbp\"; break;\r",
+              "    case 4: currency = \"uah\"; break;\r",
+              "    case 5: currency = \"pln\"; break;   \r",
+              "}\r",
+              "pm.collectionVariables.set(\"currency\", currency);\r",
+              "console.log(\"Currency:\"+currency)\r",
+              "switch (distanceUnits){\r",
+              "    case 1: distanceUnits = \"km\"; break;\r",
+              "    case 2: distanceUnits = \"ml\"; break;   \r",
+              "}\r",
+              "pm.collectionVariables.set(\"distance\",distanceUnits)\r",
+              "console.log(\"distance Units: \"+distanceUnits)\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"currency\":\"{{currency}}\",//valid currency usd, gbp,uah,pln,eur\r\n  //\"currency\": \"EUR\", //\"message\": \"Currency not found\"\r\n  \"distanceUnits\": \"{{distance}}\"// valid distance unit ml, km\r\n  //\"distanceUnits\": \"KM\"// valid distance unit ml, km\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/users/settings",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "settings"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit Email",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "function getRandomInt(min,max){\r",
+              "    return Math.floor(Math.random()*(max-min+1)+min)\r",
+              "}\r",
+              "let oldEmail=pm.collectionVariables.get(\"myRandomEmail\");\r",
+              "console.log(\"Original Email:\"+oldEmail)\r",
+              "let index=oldEmail.indexOf(\"@\")\r",
+              "let newEmail=oldEmail.substring(0,index)+\"_\"+getRandomInt(1,10000)+\"@\"+oldEmail.substring(index+1)\r",
+              "pm.collectionVariables.set(\"newEmail\",newEmail)\r",
+              "console.log(\"new Email:\" + newEmail)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.collectionVariables.set(\"myRandomEmail\",pm.collectionVariables.get(\"newEmail\"))\r",
+              "console.log(\"Updated Email:\"+pm.collectionVariables.get(\"myRandomEmail\"))\r",
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \r\n     \"email\":\"{{newEmail}}\",\r\n     \"password\": \"{{myRandomPassword}}\"\r\n    \r\n    \r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/users/email",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "email"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Edit  Password",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "console.clear()\r",
+              "let randomPassword=pm.variables.replaceIn(\"{{$randomPassword}}\")\r",
+              "let newPassword=randomPassword.slice(0,10)+\"Ba1\"\r",
+              "console.log(\"new password: \",newPassword)\r",
+              "pm.collectionVariables.set(\"newPasword\", newPassword)"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.collectionVariables.set(\"myRandomPassword\",pm.collectionVariables.get(\"newPasword\"))\r",
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"oldPassword\": \"{{myRandomPassword}}\",\r\n  \"password\": \"{{newPasword}}\",\r\n  \"repeatPassword\": \"{{newPasword}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/users/password",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "users",
+            "password"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Reset Password",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \r\n    \"email\":\"{{myRandomEmail}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/auth/resetPassword",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "resetPassword"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "javascript"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{path}}/api/auth/logout",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "logout"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete  User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "let jsonData=pm.response.json();\r",
+              "pm.test(\"Valid Status Code\", function () {\r",
+              "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+              "});\r",
+              "pm.test(\"Response Body\", function () {\r",
+              "pm.expect(jsonData.status).to.eql(\"ok\");\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "https://{{path}}/api/users",
+          "protocol": "https",
+          "host": [
+            "{{path}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "path",
+      "value": ""
+    },
+    {
+      "key": "myRandomPassword",
+      "value": ""
+    },
+    {
+      "key": "myRandomEmail",
+      "value": ""
+    },
+    {
+      "key": "userId",
+      "value": ""
+    },
+    {
+      "key": "myRandomDate",
+      "value": ""
+    },
+    {
+      "key": "myRandomBrand",
+      "value": ""
+    },
+    {
+      "key": "myRandomModel",
+      "value": ""
+    },
+    {
+      "key": "carId",
+      "value": ""
+    },
+    {
+      "key": "carMileage",
+      "value": ""
+    },
+    {
+      "key": "carReported",
+      "value": ""
+    },
+    {
+      "key": "carUpdatedMileage",
+      "value": ""
+    },
+    {
+      "key": "expenceId",
+      "value": ""
+    },
+    {
+      "key": "currency",
+      "value": ""
+    },
+    {
+      "key": "distance",
+      "value": ""
+    },
+    {
+      "key": "newEmail",
+      "value": ""
+    },
+    {
+      "key": "newPasword",
+      "value": ""
+    }
+  ]
+}
